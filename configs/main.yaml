@@ -1,0 +1,53 @@
+# RIVEN main configuration (paper mainline: `main_scratch`).
+# Mirrors experiments/ablations/registry.py, which is the executable source of
+# truth.  Values below are descriptive; edit the registry to change a run.
+
+method: RIVEN
+data:
+  version: umrm_v2280_split_v4_20261111
+  splits: {train: 1854, val: 213, test: 213}
+
+condition:
+  encoder: Qwen3-VL-4B-Instruct          # frozen base + LoRA
+  sft: {task: plan_exec, epochs: 3, lr: 1.0e-4, accum: 8, lora_r: 16}
+  selection: epoch pinned by downstream VAL FID
+  role_adapter:
+    type: role                            # split RIV / AEM channels
+    slots: 16
+    visual_tokens: 16
+    plan_slots: 4
+    time_tokens: false
+  layers: {riv: 36, aem_visual: 27, aem_plan: 18}
+  riv_prefix: direct                      # c = r; AEM is KV memory only
+  drop_mode: learned_null
+  cond_drop: 0.1
+  cfg_mem: true                           # CFG also drops m
+
+tokenizer:
+  type: rvq
+  quantizers: 6
+  init: HumanML3D RVQ, first quantizer layer only (no ViMo)
+
+head:
+  architecture: masked transformer + residual transformer
+  init: scratch                           # no HML3D head init
+  steps: 5100                             # 88 epochs at 35 iter/epoch
+  batch: 32
+  lr: 1.0e-4
+  crop: full                              # whole motion, not a 64-frame window
+  window: 64
+
+generation:
+  timesteps: 18
+  cfg_mode: intent
+  cond_scale: 1.0
+  res_scale: 1.0
+  topk: 0.95
+  lengths: gt
+  samples: 15
+
+evaluation:
+  evaluator: E2 (fixed UMRM TMR-like)
+  retrieval: source-excluded 32-pool, 20 pools/query, per-sample R@1/3/10
+  fid: E2 256-D latent, TRAIN-only PCA64
+  length: GT target length

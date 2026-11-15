@@ -1,0 +1,48 @@
+# Local HERO change used by the RIVEN condition/tokenizer glue.
+# Apply against JackYu6/HERO_release @475774d (MIT):
+#   git -C third_party/HERO apply /path/to/hero-gen.patch
+
+diff --git a/gen.py b/gen.py
+index 4fc50c8..4068158 100644
+--- a/gen.py
++++ b/gen.py
+@@ -210,7 +210,7 @@ if __name__ == '__main__':
+     #################################
+     ######Loading M-Transformer######
+     #################################
+-    t2m_transformer = load_trans_model(model_opt, opt, 'net_best_fid.tar')  # 'latest.tar'
++    t2m_transformer = load_trans_model(model_opt, opt, opt.which_epoch + '.tar')  # 'latest.tar'
+ 
+     ##################################
+     #####Loading Video Encoder########
+@@ -254,7 +254,7 @@ if __name__ == '__main__':
+         else:
+             length_list.append(opt.motion_length)
+     elif opt.video_path_file != "":
+-        with open(opt.vide_opath_file, 'r') as f:
++        with open(opt.video_path_file, 'r') as f:
+             lines = f.readlines()
+             for line in tqdm(lines):
+                 infos = line.strip().split('#')
+@@ -317,12 +317,15 @@ if __name__ == '__main__':
+             bvh_path = pjoin(animation_path, "sample%d_repeat%d_len%d.bvh" % (k, r, m_length[k]))
+             _, joint = converter.convert(joint, filename=bvh_path, iterations=100, foot_ik=False)
+ 
++            np.save(pjoin(joint_path, "sample%d_repeat%d_len%d.npy"%(k, r, m_length[k])), joint)
++            np.save(pjoin(joint_path, "sample%d_repeat%d_len%d_ik.npy"%(k, r, m_length[k])), ik_joint)
+ 
+             save_path = pjoin(animation_path, "sample%d_repeat%d_len%d.mp4"%(k, r, m_length[k]))
+             ik_save_path = pjoin(animation_path, "sample%d_repeat%d_len%d_ik.mp4"%(k, r, m_length[k]))
+ 
+-            plot_3d_motion(ik_save_path, kinematic_chain, ik_joint, title='', fps=20)
+-            plot_3d_motion(save_path, kinematic_chain, joint, title='', fps=20)
+-            np.save(pjoin(joint_path, "sample%d_repeat%d_len%d.npy"%(k, r, m_length[k])), joint)
+-            np.save(pjoin(joint_path, "sample%d_repeat%d_len%d_ik.npy"%(k, r, m_length[k])), ik_joint)
+-            
+\ No newline at end of file
++            try:
++                plot_3d_motion(ik_save_path, kinematic_chain, ik_joint, title='', fps=20)
++                plot_3d_motion(save_path, kinematic_chain, joint, title='', fps=20)
++            except Exception as e:
++                print(f"Warning: plot_3d_motion failed ({e}), skipping visualization")
++            

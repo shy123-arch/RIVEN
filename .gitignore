@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local configuration
+configs/paths.env
+
+# Data, caches, checkpoints, experiment outputs
+data/
+cache/
+state/
+runs/
+models/
+third_party/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.npz
+*.npy
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.jsonl
+tmr_assets*/
+
+# Editor / OS
+.claude/
+.codex/
+.vscode/
+.DS_Store

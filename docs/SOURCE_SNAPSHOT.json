@@ -1,0 +1,258 @@
+{
+  "schema": "riven-source-snapshot/v1",
+  "snapshot_date": "2026-11-15",
+  "source_workspace": "/mnt/data/oss/Wilson/ck/umrm",
+  "data_version": "umrm_v2280_split_v4_20261111",
+  "main_config": "main_scratch",
+  "condition_mainline": {
+    "sft_adapter": "sft_v4/epoch1 (selected by downstream VAL FID)",
+    "cache_suffix": "_sft_ep1",
+    "note": "SFT epoch2 / no suffix is the earlier 2026-11-10 table."
+  },
+  "hero": {
+    "repository": "https://github.com/JackYu6/HERO_release",
+    "commit": "475774d",
+    "patch": "patches/hero-gen.patch",
+    "license": "MIT"
+  },
+  "files": [
+    {
+      "repo_path": "src/riven/model/h1_train.py",
+      "source_path": "umrm_model/experiments/vimo_free_h1_20261101/h1_train.py",
+      "source_sha256": "0980d4b02ad22b344a68fe86aea3ecee4edba4f011fbd855faa6c8d22eaf25ba",
+      "repo_sha256": "4e1383d3beb5e50e87319b9821ba7d3d8d431e9e39ea643657a8bae1db3f2945",
+      "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "src/riven/model/h1_6q_train.py",
+      "source_path": "umrm_model/experiments/vimo_free_h1_20261101/h1_6q_train.py",
+      "source_sha256": "48ab92c0c1c8c714362a2a1dc5f164198b0e823b537d37b6c4413b49243eca85",
+      "repo_sha256": "ca3e265408d5b407799fbaa1fdef3432714ba206f5888f7e11c02617687aaa92",
+      "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "src/riven/model/h1_6q_gen_condswap.py",
+      "source_path": "umrm_model/experiments/cond_swap_v1572_20261104/h1_6q_gen_condswap.py",
+      "source_sha256": "6b83568a72e338adc04281e2066dab73da1a1c454119e15bb944560d960d2d04",
+      "repo_sha256": "b19d41152e6abc4d3499eed180a0ec62f4c30099755bd181cf09b8ea5665b2df",
+      "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "src/riven/model/cond_adapters.py",
+      "source_path": "umrm_model/experiments/vimo_free_h1_20261101/cond_adapters.py",
+      "source_sha256": "c8f808a3e066d067c81dad787df8b38b6321f3908474eedb5f005f98fda975fb",
+      "repo_sha256": "c8f808a3e066d067c81dad787df8b38b6321f3908474eedb5f005f98fda975fb",
+      "edits": "byte-identical"
+    },
+    {
+      "repo_path": "src/riven/model/ordered_adapter.py",
+      "source_path": "umrm_model/experiments/vimo_free_h1_20261101/ordered_adapter.py",
+      "source_sha256": "e09edcdfa383d192bfd9df8da114ab66582a7bfa28df638c659e3ea4d96dc366",
+      "repo_sha256": "e09edcdfa383d192bfd9df8da114ab66582a7bfa28df638c659e3ea4d96dc366",
+      "edits": "byte-identical"
+    },
+    {
+      "repo_path": "src/riven/model/motion_windows.py",
+      "source_path": "umrm_model/experiments/vimo_free_h1_20261101/motion_windows.py",
+      "source_sha256": "17cbf9ee91741f4da959fb70fcd7bec9926f23aff289cf8e5dd2b027d9875d9d",
+      "repo_sha256": "17cbf9ee91741f4da959fb70fcd7bec9926f23aff289cf8e5dd2b027d9875d9d",
+      "edits": "byte-identical"
+    },
+    {
+      "repo_path": "src/riven/model/intent_patch.py",
+      "source_path": "umrm_model/experiments/vimo_free_h1_20261101/intent_patch.py",
+      "source_sha256": "4038bf31e0176d81cf53eb96f1070b1c4f9e79ad640c9c86eedf2bdb64435e58",
+      "repo_sha256": "4038bf31e0176d81cf53eb96f1070b1c4f9e79ad640c9c86eedf2bdb64435e58",
+      "edits": "byte-identical"
+    },
+    {
+      "repo_path": "src/riven/model/cfg_patch.py",
+      "source_path": "umrm_model/experiments/vimo_free_h1_20261101/cfg_patch.py",
+      "source_sha256": "9a1e4aff1d7d99e6d50fda15535dd3b1379396dbebdc79e8de11a8c2728f6c50",
+      "repo_sha256": "9a1e4aff1d7d99e6d50fda15535dd3b1379396dbebdc79e8de11a8c2728f6c50",
+      "edits": "byte-identical"
+    },
+    {
+      "repo_path": "src/riven/model/vq_train.py",
+      "source_path": "umrm_model/experiments/vimo_free_h1_20261101/vq_train.py",
+      "source_sha256": "814e8d0b1e6ea4b58a8402cca280695378e40ac037a76cd806692691d5cf5ec6",
+      "repo_sha256": "f15f232c6c11c00d177ef4e2d7a2a2deacc5a5de96c2615bb11aa55f75606994",
+      "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "src/riven/model/finetune_hero.py",
+      "source_path": "umrm_model/experiments/hero_finetune/finetune_hero.py",
+      "source_sha256": "ca9a6880babd24a74d92bfaa27301d02ae1ac3794b8e2145b6aaa9736353648d",
+      "repo_sha256": "00fc9f45327b8b80932181f5a4beac8f0e7fabdb85226ebee9fc54717cada13f",
+      "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "src/riven/model/cliponly_data.py",
+      "source_path": "umrm_model/experiments/cliponly_v1/data.py",
+      "source_sha256": "76ccd15b0b7c5d619a4be8585fc1fb4056d0ea044d5e5e7c38de02d800349323",
+      "repo_sha256": "7f676a5f8b05f6dfe51d47b3bbe659d8085079ed2b9adfd514dfabe5b7dc5c59",
+      "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "src/riven/sft/sft.py",
+      "source_path": "UMRM-OPD/pipeline/sft.py",
+      "source_sha256": "224b688255ad2f0812009860ca73593afbfd3002a7b9782a15ef3420eee8f9fe",
+      "repo_sha256": "224b688255ad2f0812009860ca73593afbfd3002a7b9782a15ef3420eee8f9fe",
+      "edits": "byte-identical"
+    },
+    {
+      "repo_path": "src/riven/sft/common.py",
+      "source_path": "UMRM-OPD/pipeline/common.py",
+      "source_sha256": "357c68b363510805df9f70662c71cbc76e9e585c9644c73364de616af506431d",
+      "repo_sha256": "66ea24974e8928016edb9ac53abd56e059e00670d061803cb4fb7738bae3beda",
+      "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "src/riven/sft/vt_io.py",
+      "source_path": "UMRM-OPD/pipeline/vt_io.py",
+      "source_sha256": "01e8727fe9f75816023eec7b42f29899b4713d69686b42de885a954d6fb58bd7",
+      "repo_sha256": "01e8727fe9f75816023eec7b42f29899b4713d69686b42de885a954d6fb58bd7",
+      "edits": "byte-identical"
+    },
+    {
+      "repo_path": "src/riven/features/cache_prompt_hidden.py",
+      "source_path": "umrm_model/experiments/end2end_v1572_20261028/scripts/cache_prompt_hidden.py",
+      "source_sha256": "5c0f955962b25a6abd0b7365574e92ca169177025f8c4dc8685f94078a2a38b0",
+      "repo_sha256": "5dd1403517207a3ca4d3c74e8e0a06c4658146b3b3a9c6563e43c56d9f29ef34",
+      "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "src/riven/features/cache_visual_hidden.py",
+      "source_path": "umrm_model/experiments/end2end_v1572_20261028/scripts/cache_visual_hidden.py",
+      "source_sha256": "f6b706aeaa8580930d919cd1a57cf7e62bbfb25eb27942a5687cd03250629a20",
+      "repo_sha256": "393961d550cdc5100d4c68759153aa338db7e4b9478ee003be1a04920885e5ed",
+      "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "src/riven/features/merge_prompt_hidden.py",
+      "source_path": "umrm_model/experiments/end2end_v1572_20261028/scripts/merge_prompt_hidden.py",
+      "source_sha256": "8cdad9be41d8361fba4c228b9131373a74ca719bfc8fd71e19a92b5c9b086316",
+      "repo_sha256": "5271f0562c33b2a6872e0dd7909350dd77859cde0edf2cbbb979711e384f3c5c",
+      "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "src/riven/features/build_tmr_motion_emb_v4.py",
+      "source_path": "umrm_model/experiments/vimo_free_h1_20261101/build_tmr_motion_emb_v4.py",
+      "source_sha256": "10057e2061d926afbc73bf0de006f486a98ec23aa48c48654cb2fe301535afaa",
+      "repo_sha256": "4af0977d525e206bdf48a3fe6fe040a2656913bf5662f019faea471acf843d4d",
+      "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "src/riven/features/build_base_textfeat.py",
+      "source_path": "umrm_model/experiments/vimo_free_h1_20261101/build_base_textfeat.py",
+      "source_sha256": "e64d1b37e3049ddcf881e8f86a87f7ebeb3759b4df6c3863d04abc4ae91b41a5",
+      "repo_sha256": "819e6453e18770dd3939f50396430326beb894f35af23d9c2083617b69e0dcb7",
+      "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "src/riven/eval/eval_r.py",
+      "source_path": "umrm_model/experiments/egoreal_baselines_20261109/eval_r.py",
+      "source_sha256": "f0545af54334f5c6e5b01d98c6b0356304e4fd38b8aa6e86b92a742e40039ac4",
+      "repo_sha256": "ec3f0ea6999376494dc2c65d2ebbbdf2995cd51d3189374237ca9e58e607befc",
+      "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "src/riven/eval/eval_fid.py",
+      "source_path": "umrm_model/experiments/egoreal_baselines_20261109/eval_fid.py",
+      "source_sha256": "ade956ab1f3f00d9fd21377fda8f183e792ef7465919c07a7942cefa3840f693",
+      "repo_sha256": "0e8b8292dee6494c5faa86346148824ecefad7666be7ba4695f5bbfde8160fcd",
+      "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "src/riven/eval/evaluator_train.py",
+      "source_path": "umrm_model/experiments/hero_fair_v1572_20261102/evaluator_train.py",
+      "source_sha256": "effc6d950d602b83e144e61e620233f24b770e84cd191837d3abf6e6442b07db",
+      "repo_sha256": "3c8822e6675f4d6db41948cfbced1dd9aaf0c8389cc3bf0d0539a03907cff771",
+      "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "src/riven/eval/tmr_adapter.py",
+      "source_path": "umrm_model/experiments/generation_benchmark_v1/tmr_adapter.py",
+      "source_sha256": "1651d2aaff9535e5db339dceebe71f4d93a4f144999634720cd8246a523bdc7f",
+      "repo_sha256": "1651d2aaff9535e5db339dceebe71f4d93a4f144999634720cd8246a523bdc7f",
+      "edits": "byte-identical"
+    },
+    {
+      "repo_path": "src/riven/eval/setup_tmr.py",
+      "source_path": "umrm_model/experiments/generation_benchmark_v1/setup_tmr.py",
+      "source_sha256": "1452452d9f46172c8969e815e0f2b7d26ea2370b71b15e317afed188acc0b6d3",
+      "repo_sha256": "f40ac8b9348866007388953071d99beef5e8497b8e1faae9f74b0704b4064c3a",
+      "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "experiments/ablations/common.py",
+      "source_path": "umrm_model/experiments/riven_ablations_20261109/common.py",
+      "source_sha256": "53eed501639a2a284f246d6bc7dc22fcc45c2b43cb68df7ea03c573cf821cf4f",
+      "repo_sha256": "6bf71aa08e5a3e2db554791fd5779ce06d293437fe5d016829eee2ffd09fb820",
+      "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "experiments/ablations/registry.py",
+      "source_path": "umrm_model/experiments/riven_ablations_20261109/registry.py",
+      "source_sha256": "02cd5a230d1e0a8db0091ead165f8394766ec8fe5c1ca9bc5018f5fb8845b5c6",
+      "repo_sha256": "02cd5a230d1e0a8db0091ead165f8394766ec8fe5c1ca9bc5018f5fb8845b5c6",
+      "edits": "byte-identical"
+    },
+    {
+      "repo_path": "experiments/ablations/prepare.py",
+      "source_path": "umrm_model/experiments/riven_ablations_20261109/prepare.py",
+      "source_sha256": "4318afb632db4588488484a8011ded86ee860b5eee42c08e1c67eebe6c788956",
+      "repo_sha256": "91619e5457f7869e7886d1c06155fb85262379d455b66f3337092a3a1dbdc8da",
+      "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "experiments/ablations/run.py",
+      "source_path": "umrm_model/experiments/riven_ablations_20261109/run.py",
+      "source_sha256": "1b6593b8a5acaea5c36f5541f1ad916a193de8ef70f2ff5386c6313638969ddd",
+      "repo_sha256": "ef5a26fd43c1bbdc19cfdca8c90fd888f691190b556809be7b74b7ba5dc7ac90",
+      "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "experiments/ablations/release.py",
+      "source_path": "umrm_model/experiments/egoreal_baselines_20261109/common.py",
+      "source_sha256": "cea31d454888007359db55e2a539aaf72cc0abef417427e461334364c8d7f9d2",
+      "repo_sha256": "3b38b69ed98e786061cd2e30d36bf97ba0f66de2149e7ef85b47605f0c76f66c",
+      "edits": "paths/imports only"
+    }
+  ],
+  "excluded_from_v4": [
+    "ablation_queue.py",
+    "build_experiment_workbook.py",
+    "build_nous_frame_cache.py",
+    "build_riv_view.py",
+    "cache_visual_hidden_variant.py",
+    "export_riv.py",
+    "fid_ci*.py",
+    "fid_metric_design.py",
+    "fid_score_fixed.py",
+    "fid_validation.py",
+    "make_main_table_*.py",
+    "orchestrator.py",
+    "r_ci.py",
+    "riv_queue.py",
+    "riven_cfg_queue.py",
+    "riven_ckpt_queue.py",
+    "riven_ckpt_queue_ep200.py",
+    "riven_orchestrator.py",
+    "standard_fid.py",
+    "standard_fid_ablation.py",
+    "standard_fid_eval.py",
+    "summarize.py",
+    "summarize_all.py",
+    "summarize_test.py",
+    "test_*.py",
+    "trackA_fullref.py",
+    "watch_five.py"
+  ],
+  "notes": "No algorithmic edits. Hard-coded server paths were replaced by environment variables; v4 output paths use $RIVEN_STATE/ablations to match experiments/ablations.",
+  "private_v4": {
+    "path": "riven_private/experiments_v4_20261115 (outside this repository)",
+    "source": "umrm_model/experiments/final_v4_20261111/*.py",
+    "reason": "experiment drivers; reference unreleased baseline runs"
+  }
+}

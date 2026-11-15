@@ -1,0 +1,16 @@
+# Core dependencies.  The original experiments used three environments
+# (Qwen / training / evaluation); a single environment also works if the
+# versions are compatible.  See docs/REPRODUCE.md.
+
+torch>=2.0
+numpy>=1.24
+
+# Condition encoder (RIVEN_PY_QWEN only)
+transformers>=4.57
+peft>=0.10
+
+# Excel summaries (RIVEN_PY_EVAL only)
+openpyxl>=3.1
+
+# Optional: Qwen download
+# modelscope>=1.20
