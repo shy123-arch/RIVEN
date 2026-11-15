@@ -27,6 +27,14 @@ at them.
 - Use here: frozen vision-language backbone plus a LoRA adapter trained for the
   plan -> exec task.  Model weights are not redistributed.
 
+## Clean evaluator
+
+`src/riven/eval/clean/modules.py` and `train.py` implement the standard
+HumanML3D/KIT-style evaluator (movement Conv encoder + BiGRU text/motion
+encoders, margin contrastive loss) adapted to EgoReReal TRAIN.  They are
+derived from the official HumanML3D evaluator code and keep its original
+terms; the adapted weights are released separately for evaluation.
+
 ## Official TMR / TEMOS assets
 
 - `src/riven/eval/setup_tmr.py` fetches a pinned official TMR archive and

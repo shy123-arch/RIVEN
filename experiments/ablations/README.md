@@ -9,12 +9,13 @@ No ablation re-implements the model.
 | Train | `src/riven/model/h1_6q_train.py` |
 | Generate | `src/riven/model/h1_6q_gen_condswap.py` |
 | VQ | `src/riven/model/vq_train.py` (6q, HumanML3D init) |
-| Evaluate | `src/riven/eval/eval_r.py`, `src/riven/eval/eval_fid.py` |
+| Evaluate | `src/riven/eval/clean/eval_clean.py` (paper evaluator) |
 
 ## Base configuration (`main_scratch`)
 
 RIV + AEM, learned null, `cfg_mem`, RoleAdapter with `riv_prefix=direct`,
-no time tokens, full-length crop, 6q VQ, head from scratch, 5100 steps.
+no time tokens, full-length crop, 6q VQ, head from scratch, 11,500 steps
+(200 epochs) with VAL selection among 9000 / 10500 / last.
 
 ## Arms
 
@@ -38,13 +39,13 @@ cd experiments/ablations
 python run.py prepare --release "$RIVEN_DATA" --vq "$RIVEN_CACHE/vq/best.pt"
 
 python run.py train --ablation main_scratch --release "$RIVEN_DATA" \
-  --gpu 0 --steps 5100 --seed 20261101 --tag v4_s20261101
+  --gpu 0 --steps 11500 --seed 20261101 --tag unseen200_s20261101
 
 python run.py generate --ablation riv_off --release "$RIVEN_DATA" \
-  --gpu 0 --samples 15 --tag v4_s20261101
+  --gpu 0 --samples 15 --tag unseen200_s20261101
 
 python run.py eval --ablation riv_off --release "$RIVEN_DATA" \
-  --gpu 0 --samples 15 --tag v4_s20261101
+  --gpu 0 --samples 15 --tag unseen200_s20261101
 
 python run.py smoke --ablation main --gpu 0 --train-smoke
 ```
@@ -60,7 +61,8 @@ $RIVEN_STATE/ablations/runs/<release>/<tag>/<ablation>/{train,gen,eval,logs}
 ## Protocol
 
 - VAL 213, GT target length, 15 samples, no rerank.
-- R: fixed E2, per-sample, source-excluded 32-pool, 20 pools/query.
-- FID: E2 256-D latent with TRAIN-only PCA64, per generation sample.
+- Evaluator: clean HML3D-init, three evaluator seeds.
+- R: t2m, source-excluded 32-pool, 20 pools/query, R@1/2/3/10.
+- FID: 512-D motion embedding, per generation sample, GT/min length aligned.
 - Training arms: 3 seeds.  Mechanism arms: same checkpoint, inference only.
 - TEST only after all arms are frozen.

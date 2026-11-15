@@ -20,9 +20,10 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-from common import (ABL_STATE, DEFAULT_MAIN_CKPT, DEFAULT_RELEASE, EVAL_FID, EVAL_R, GEN, PY,
-                    PY_EVAL, TRAIN, VQ_TRAIN, atomic_json, cache_root, clean_env, data_root,
-                    link, run, run_root, version_of)
+from common import (ABL_STATE, CLEAN_EVAL_DATA, CLEAN_EVAL_ROOT, DEFAULT_MAIN_CKPT,
+                    DEFAULT_RELEASE, EVAL_CLEAN, EVAL_SEEDS, GEN, PY, PY_EVAL, TRAIN,
+                    VQ_TRAIN, atomic_json, cache_root, clean_env, data_root, link, run,
+                    run_root, version_of)
 from registry import ABLATIONS, INFERENCE, TRAIN as TRAIN_ABLATIONS
 
 
@@ -109,15 +110,13 @@ def cmd_eval(args, release: Path, ablation: str, tag: str | None = None) -> int:
         raise FileNotFoundError(npz)
     ev = run_root(release, ablation, tag) / "eval"
     ev.mkdir(parents=True, exist_ok=True)
-    r = ev / f"{args.split}_S{args.samples}.r.json"
-    f = ev / f"{args.split}_S{args.samples}.fid.json"
-    rc = subprocess.call([PY_EVAL, str(EVAL_R), "--release", str(release), "--npz", str(npz),
-                          "--split", args.split, "--out", str(r)], env=clean_env(release, args.gpu))
-    if rc:
-        return rc
-    return subprocess.call([PY_EVAL, str(EVAL_FID), "--release", str(release),
-                            "--model", f"{ablation}={npz}", "--split", args.split,
-                            "--out", str(f)], env=clean_env(release, args.gpu))
+    out = ev / f"{args.split}_S{args.samples}.clean.json"
+    return subprocess.call(
+        [PY_EVAL, str(EVAL_CLEAN), "--spec", f"{ablation}={npz}", "--split", args.split,
+         "--release", str(release), "--data", str(CLEAN_EVAL_DATA),
+         "--eval-root", str(CLEAN_EVAL_ROOT), "--eval-seeds", EVAL_SEEDS,
+         "--out", str(out)],
+        env=clean_env(release, args.gpu))
 
 
 def check_npz(path: Path) -> dict:

@@ -18,14 +18,14 @@ import torch
 import torch.nn.functional as F
 
 HERE=Path(__file__).resolve().parent
-ROOT=Path(os.environ.get('RIVEN_ROOT', HERE.parents[2]))
-ASSETS=Path(os.environ.get('RIVEN_TMR_ASSETS', str(HERE/'tmr_assets')))
+ROOT=Path(os.environ.get('RIVEN_ROOT', HERE.parents[4]))
+ASSETS=Path(os.environ.get('RIVEN_TMR_ASSETS', str(HERE.parent/'tmr_assets')))
 STATE=Path(os.environ.get('RIVEN_EVAL_STATE', str(ROOT/'state/evaluator')))
 RELEASE=Path(os.environ.get('RIVEN_DATA', str(ROOT/'data/egoreal')))
 TEXT_RELEASE=Path(os.environ.get('RIVEN_TEXT_RELEASE', str(RELEASE)))
 EXPECT_TRAIN=int(os.environ.get('RIVEN_EVAL_EXPECT_TRAIN', '1096'))
 EXPECT_VAL=int(os.environ.get('RIVEN_EVAL_EXPECT_VAL', '213'))
-sys.path.insert(0,str(ASSETS.parent))
+sys.path.insert(0,str(HERE.parent)); sys.path.insert(0,str(ASSETS.parent))
 from tmr_adapter import OfficialTMR, preprocess, find_model, official_module
 
 def digest(path):

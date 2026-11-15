@@ -23,8 +23,8 @@ import torch
 import torch.nn.functional as F
 
 HERE = Path(__file__).resolve().parent
-ROOT = Path(os.environ.get("RIVEN_ROOT", HERE.parents[2]))
-EVAL_DIR = Path(os.environ.get("RIVEN_EVAL_DIR", str(ROOT / "state/evaluator")))
+ROOT = Path(os.environ.get("RIVEN_ROOT", HERE.parents[4]))
+EVAL_DIR = Path(os.environ.get("RIVEN_EVAL_DIR", str(ROOT / "state/evaluator_e2")))
 sys.path.insert(0, str(HERE))
 import evaluator_train as E  # noqa: E402
 

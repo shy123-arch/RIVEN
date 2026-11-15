@@ -225,6 +225,48 @@
       "source_sha256": "126263c322d03229577de0f5b5770555e5b1575c458c070592f0db5f511e812e",
       "repo_sha256": "ce6a446a71faa028373e75ebf90d12895ecd70e02ae9c5e6e07e588981afd8be",
       "edits": "missing-clip check + portable clip resolution"
+    },
+    {
+      "repo_path": "src/riven/eval/clean/modules.py",
+      "source_path": "umrm_model/experiments/fid_evaluator_egoreal_20261111/modules.py",
+      "source_sha256": "ba8511bb338e563de28df3e9423fca71763903dd0e8f9d12d915f4983b6cac57",
+      "repo_sha256": "ba8511bb338e563de28df3e9423fca71763903dd0e8f9d12d915f4983b6cac57",
+      "edits": "paths only"
+    },
+    {
+      "repo_path": "src/riven/eval/clean/train.py",
+      "source_path": "umrm_model/experiments/fid_evaluator_egoreal_20261111/train.py",
+      "source_sha256": "04f22c50b4630f9889399a971eaf80cbb3c32a2a64cf8b93de91671c8c84f4fe",
+      "repo_sha256": "0ff009016077db387ab4820ac40db2656a53c502a501756bc4d6edc64c7f80fc",
+      "edits": "paths only"
+    },
+    {
+      "repo_path": "src/riven/eval/clean/prepare.py",
+      "source_path": "umrm_model/experiments/fid_evaluator_egoreal_20261111/prepare.py",
+      "source_sha256": "93b7d09c1c8621e0a79548e486bf0b8c5795f32d063b3cb7eb481732fdbd7bfa",
+      "repo_sha256": "20a14309200477a195b4d539ebd7c7b91d89451a14a99af5d185b5dc1e76db07",
+      "edits": "paths only"
+    },
+    {
+      "repo_path": "src/riven/eval/clean/train_clean_eval.py",
+      "source_path": "/mnt/workspace/Wilson/ck/umrm_state/final_v4_20261111/train_clean_eval.py",
+      "source_sha256": "7f3c9faddf8efde152132e5d172aa68773736e693ad7435647b16848b0b6aba3",
+      "repo_sha256": "fa8d0627573ccec20f362b2d55985d5a7415326b2f917a9b3b6b2f3fb6c60a68",
+      "edits": "paths only"
+    },
+    {
+      "repo_path": "src/riven/eval/clean/train_clean_eval_official.py",
+      "source_path": "/mnt/workspace/Wilson/ck/umrm_state/final_v4_20261111/train_clean_eval_official.py",
+      "source_sha256": "9ff0786ecb04e03a9e903c88d1f39541a01c26b058003449885e4c4f1484fc82",
+      "repo_sha256": "15cf1655e791c973a73643023440e3ddd1e67238faaba0d833cf4fe23401c601",
+      "edits": "paths only"
+    },
+    {
+      "repo_path": "src/riven/eval/clean/eval_clean.py",
+      "source_path": "umrm_model/experiments/signature_20261112/group5/eval_clean_metrics.py",
+      "source_sha256": "f66de09c919b542494aca77d5b4f3929bd2a1fc265399577c59ff60e34781557",
+      "repo_sha256": "23b04326a6c608686cec9dc5afe297490fb4f9479aabf4e67aea33605a46e17a",
+      "edits": "paths only"
     }
   ],
   "excluded_from_v4": [
@@ -256,10 +298,17 @@
     "trackA_fullref.py",
     "watch_five.py"
   ],
-  "notes": "No algorithmic edits. Hard-coded server paths were replaced by environment variables; v4 output paths use $RIVEN_STATE/ablations to match experiments/ablations. prep_video_cache.py added so the dataset videos can be converted to Qwen video tensors; clip paths support RIVEN_CLIP_ROOT/RIVEN_CLIP_MAP; NCE embedding bank is loaded only when an NCE term is on. The only HERO weight needed is one 81 MB HumanML3D RVQ checkpoint (net_best_fid.tar); evaluation assets are shipped as a separate bundle.",
+  "notes": "No algorithmic edits. Hard-coded server paths were replaced by environment variables; v4 output paths use $RIVEN_STATE/ablations to match experiments/ablations. prep_video_cache.py added so the dataset videos can be converted to Qwen video tensors; clip paths support RIVEN_CLIP_ROOT/RIVEN_CLIP_MAP; NCE embedding bank is loaded only when an NCE term is on. The only HERO weight needed is one 81 MB HumanML3D RVQ checkpoint (net_best_fid.tar); evaluation assets are shipped as a separate bundle. Route audited 2026-11-15: the paper table is the unseen split with the clean evaluator; the v4/E2/epoch1 route is not the paper configuration.",
   "private_v4": {
     "path": "riven_private/experiments_v4_20261115 (outside this repository)",
     "source": "umrm_model/experiments/final_v4_20261111/*.py",
     "reason": "experiment drivers; reference unreleased baseline runs"
+  },
+  "paper_route": {
+    "data": "umrm_v2280_unseen_20261112",
+    "sft": "sft_unseen_full/epoch2 (init from s10k_pt/epoch1)",
+    "head": "main_scratch, 11500 steps, select 9000/10500/last by VAL R@10 (0.5pp) then min FID",
+    "evaluator": "clean HML3D-init, 3 seeds, 512-D FID + R@1/2/3/10",
+    "verified_cell": "unseen200sel_s20261101 / eval seed 20261111: FID 1.4959, R@1 .2036, R@3 .4281, R@10 .7853"
   }
 }

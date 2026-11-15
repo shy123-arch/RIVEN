@@ -32,8 +32,12 @@ TRAIN = CODE / "h1_6q_train.py"
 VQ_TRAIN = CODE / "vq_train.py"
 GEN = CODE / "h1_6q_gen_condswap.py"
 VISUAL_CACHE = SRC / "features/cache_visual_hidden.py"
-EVAL_R = SRC / "eval/eval_r.py"
-EVAL_FID = SRC / "eval/eval_fid.py"
+EVAL_CLEAN = SRC / "eval/clean/eval_clean.py"
+EVAL_LEGACY_R = SRC / "eval/legacy_e2/eval_r.py"
+EVAL_LEGACY_FID = SRC / "eval/legacy_e2/eval_fid.py"
+CLEAN_EVAL_ROOT = Path(os.environ.get("RIVEN_CLEAN_EVAL_ROOT", STATE_ROOT / "clean_evaluators"))
+CLEAN_EVAL_DATA = Path(os.environ.get("RIVEN_CLEAN_EVAL_DATA", STATE_ROOT / "clean_eval_data"))
+EVAL_SEEDS = os.environ.get("RIVEN_EVAL_SEEDS", "20261111,20261112,20261113")
 
 PY = os.environ.get("RIVEN_PY", sys.executable)
 PY_EVAL = os.environ.get("RIVEN_PY_EVAL", sys.executable)
@@ -59,10 +63,10 @@ def data_root(release: Path) -> Path:
 def cache_root(release: Path) -> Path:
     """Condition-feature root for a release.
 
-    The 2026-11-13 mainline reads features from the SFT epoch-1 adapter, which
-    lives in a sibling cache directory. Select it with
-    ``RIVEN_CACHE_SUFFIX=_sft_ep1`` so every train/generate/eval call in the
-    runner uses the same condition features.
+    The paper main table uses the base cache built from the SFT epoch selected
+    by VAL NLL (epoch2 on the unseen split), so ``RIVEN_CACHE_SUFFIX`` stays
+    empty.  ``_sft_ep1`` selects the sibling epoch1 cache used by the earlier
+    v4-split experiments and is not the paper configuration.
     """
     suffix = os.environ.get("RIVEN_CACHE_SUFFIX", "")
     return ABL_STATE / "cache" / (version_of(release) + suffix)

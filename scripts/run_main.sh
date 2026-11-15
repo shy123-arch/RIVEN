@@ -1,11 +1,12 @@
 #!/bin/bash
-# End-to-end RIVEN main_scratch run for one seed.
+# Paper main-table chain for one seed:
+#   VQ (HML3D init) -> head 11,500 steps -> VAL selection -> TEST -> clean eval
 #
 #   set -a; . configs/paths.env; set +a
 #   SEED=20261101 GPU=0 bash scripts/run_main.sh
 #
-# Prerequisites: condition caches (scripts/build_features.sh), Qwen SFT adapter,
-# HERO checkout, E2 evaluator checkpoint.  See docs/REPRODUCE.md.
+# Prerequisites: condition caches (scripts/build_features.sh), SFT epoch2
+# adapter, HERO checkout + RVQ checkpoint, and the clean evaluator bundle.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -15,34 +16,11 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 SEED=${SEED:-20261101}
 GPU=${GPU:-0}
-STEPS=${STEPS:-5100}
+STEPS=${STEPS:-11500}
 SAMPLES=${SAMPLES:-15}
-TAG=${TAG:-v4_s${SEED}}
-VQ=${RIVEN_VQ:-$RIVEN_CACHE/vq/best.pt}
-
+CHECKPOINTS=${CHECKPOINTS:-9000,10500,last}
 PY=${RIVEN_PY:-python}
-RUN="$ROOT/experiments/ablations/run.py"
 
-if [ ! -f "$VQ" ]; then
-  echo "[1/4] tokenizer"
-  "$PY" "$ROOT/src/riven/model/vq_train.py" \
-    --data "$RIVEN_DATA" --quantizers 6 --steps 3000 --window-max 208 \
-    --seed "$SEED" --out "$(dirname "$VQ")"
-else
-  echo "[1/4] tokenizer exists: $VQ"
-fi
-
-echo "[2/4] prepare"
-"$PY" "$RUN" prepare --release "$RIVEN_DATA" --vq "$VQ"
-
-echo "[3/4] train head (seed $SEED)"
-"$PY" "$RUN" train --ablation main_scratch --release "$RIVEN_DATA" \
-  --gpu "$GPU" --steps "$STEPS" --seed "$SEED" --tag "$TAG" --vq "$VQ"
-
-echo "[4/4] generate + evaluate VAL"
-"$PY" "$RUN" generate --ablation main_scratch --release "$RIVEN_DATA" \
-  --gpu "$GPU" --samples "$SAMPLES" --split val --tag "$TAG"
-"$PY" "$RUN" eval --ablation main_scratch --release "$RIVEN_DATA" \
-  --gpu "$GPU" --samples "$SAMPLES" --split val --tag "$TAG"
-
-echo "done: $RIVEN_STATE/ablations/runs/$(basename "$RIVEN_DATA")/$TAG/main_scratch"
+"$PY" "$ROOT/experiments/main_table/run_main_table.py" \
+  --release "$RIVEN_DATA" --seeds "$SEED" --gpu "$GPU" \
+  --steps "$STEPS" --samples "$SAMPLES" --checkpoints "$CHECKPOINTS"

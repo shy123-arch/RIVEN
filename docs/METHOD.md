@@ -58,8 +58,11 @@ checkpoint or statistic is used.
 - `ResidualTransformer`: predicts quantizers 2..6 from the accumulated codebook
   embeddings, the prefix `g` and the memory `m`.
 
-Main configuration: full-length crop, batch 32, lr 1e-4, 5100 steps
-(88 epochs at 35 iter/epoch), head trained from scratch.
+Main configuration: full-length crop, batch 32, lr 1e-4, 11,500 steps
+(200 epochs at ~58 iter/epoch), head trained from scratch.  The paper selects
+the VAL checkpoint among 9k / 10.5k / last: keep checkpoints within 0.5pp of
+the best VAL R@10, then take the lowest VAL FID.  TEST is generated once from
+the selected checkpoint.
 
 Conditioning is made separable during training:
 
@@ -87,9 +90,13 @@ Conditioning is made separable during training:
 
 ## Evaluation
 
-`src/riven/eval/eval_r.py` computes per-sample R@1/3/10 with 32-candidate pools
-that exclude the query's source, 20 pools per query, seed 0, text-to-motion
-direction.  `eval_fid.py` computes FID in the E2 256-D latent with a PCA basis
-fitted on TRAIN only (64 components by default).  Both load the frozen
-`E2_best.pt`; `evaluator_train.py` and `tmr_adapter.py` are the reference
-evaluator implementation and the checksum-verified official TMR wrapper.
+The paper uses the **clean HML3D-init evaluator** in `src/riven/eval/clean/`:
+a movement Conv1d encoder plus BiGRU text/motion encoders, initialised from the
+official HumanML3D evaluator and adapted on EgoReReal TRAIN.  Three evaluator
+seeds are averaged.  `eval_clean.py` reports per-sample 512-D FID (GT/min length
+aligned) and R@1/2/3/10 with source-excluded 32-candidate pools, 20 pools per
+query, seed 0, text-to-motion direction.
+
+`src/riven/eval/legacy_e2/` is the older E2 evaluator (256-D latent, PCA64).
+Its numbers live in a different embedding space and are not comparable to the
+paper table; it is kept only for older internal experiments.

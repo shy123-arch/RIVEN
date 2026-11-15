@@ -62,6 +62,25 @@ byte-identical.
 | `src/riven/eval/tmr_adapter.py` | `umrm_model/experiments/generation_benchmark_v1/tmr_adapter.py` | `1651d2aaff95` | 0 |
 | `src/riven/eval/setup_tmr.py` | `umrm_model/experiments/generation_benchmark_v1/setup_tmr.py` | `1452452d9f46` | 3 |
 
+## Paper evaluator (added after the route audit, 2026-11-15)
+
+The paper main table does not use E2.  These files were copied in from the
+clean-evaluator codebase:
+
+| Repo path | Source path |
+|---|---|
+| `src/riven/eval/clean/modules.py` | `umrm_model/experiments/fid_evaluator_egoreal_20261111/modules.py` |
+| `src/riven/eval/clean/train.py` | `umrm_model/experiments/fid_evaluator_egoreal_20261111/train.py` |
+| `src/riven/eval/clean/train_clean_eval.py` | `$UMRM_STATE_DIR/final_v4_20261111/train_clean_eval.py` |
+| `src/riven/eval/clean/train_clean_eval_official.py` | `$UMRM_STATE_DIR/final_v4_20261111/train_clean_eval_official.py` |
+| `src/riven/eval/clean/prepare.py` | `umrm_model/experiments/fid_evaluator_egoreal_20261111/prepare.py` |
+| `src/riven/eval/clean/eval_clean.py` | `umrm_model/experiments/signature_20261112/group5/eval_clean_metrics.py` |
+| `experiments/main_table/select_test.py` | adapted from `unseen_split_20261112/run_200ep_selection.py` |
+| `experiments/main_table/run_main_table.py` | new wrapper over `experiments/ablations/run.py` |
+
+`src/riven/eval/{eval_r,eval_fid,evaluator_train}.py` moved to
+`src/riven/eval/legacy_e2/`; they are the deprecated E2 evaluator.
+
 ## Ablation harness
 
 | Repo path | Source path | Source SHA-256 | Δ lines |
@@ -78,8 +97,10 @@ The v4 job queues, per-seed orchestrator, CI/standard-FID and TEST summary
 scripts are kept in the authors' private workspace
 (`riven_private/experiments_v4_20261115/`, copied from
 `umrm_model/experiments/final_v4_20261111/`) and are **not** part of this
-repository.  They are experiment drivers, not part of the method, and they
-reference baseline runs that are not released here.  The public
+repository.  They are experiment drivers, not part of the method.
+
+The public paper driver is `experiments/main_table/`: it runs the 200-epoch
+training, the VAL selection rule and the TEST run for one seed.
 `experiments/ablations/run.py` covers train / generate / eval for every
 registered arm.
 
@@ -108,34 +129,40 @@ Two layout-only renames were also applied:
 
 ## Validation performed on the snapshot
 
-Run on 2026-11-15, against the real v4 release and HERO checkout:
+Run on 2026-11-15, against the real unseen release, HERO checkout and the
+paper evaluator assets:
 
 - `python -m compileall src experiments` — pass.
 - `bash scripts/smoke.sh` — pass (registry 60 arms, SFT prompt module).
-- `experiments/ablations/run.py prepare --release umrm_v2280_split_v4_20261111`
-  — schema check pass, `ready: true`, only optional blank/shuffle controls
-  reported missing.
+- `experiments/ablations/run.py prepare --release umrm_v2280_unseen_20261112`
+  — schema check pass, `ready: true`.
 - Import of `h1_train`, `h1_6q_train`, `h1_6q_gen_condswap`, `vq_train`,
   `cond_adapters`, `ordered_adapter`, `intent_patch`, `cfg_patch`,
   `motion_windows` in the HERO environment — pass.
 - Import of `sft`, `common`, `vt_io` in the Qwen environment — pass.
-- Import of `eval_r`, `eval_fid`, `evaluator_train` in the evaluator
-  environment — pass.
 - Every registry flag exists in the corresponding script's argparse
   (cross-check: 0 missing).
+- **Metric reproduction**: `src/riven/eval/clean/eval_clean.py` on the recorded
+  `unseen200sel_s20261101` TEST npz with evaluator seed 20261111 returns
+  FID 1.4959, R@1 .2036, R@3 .4281, R@10 .7853 — identical to the recorded
+  paper cell (R@2 .3308 is additionally reported).
 
-Not run here: training, generation and metric computation, because that
-requires the GPU allocation and the external checkpoints.  The commands and
-their prerequisites are in `docs/REPRODUCE.md`.
+Not run here: the 11,500-step training and generation for a new seed, because
+that requires the full GPU allocation.  The commands are in
+`docs/REPRODUCE.md`.
 
-## Condition-feature mainline
+## Paper route
 
-Two v4 caches exist.  The earlier table used SFT epoch2 (selected by VAL text
-NLL).  The final paper mainline (2026-11-13) pins SFT epoch1, selected by
-downstream VAL FID, and reads the sibling cache
-`cache/umrm_v2280_split_v4_20261111_sft_ep1/`.  Reproduce it with:
+The paper main table is:
 
-```bash
-export RIVEN_SFT_ADAPTER=.../sft_v4/epoch1
-export RIVEN_CACHE_SUFFIX=_sft_ep1
-```
+- data `umrm_v2280_unseen_20261112` (1854/213/213, source-disjoint);
+- SFT `sft_unseen_full`, epoch2 (lowest VAL NLL), initialised from
+  `s10k_pt/epoch1`;
+- base caches (`RIVEN_CACHE_SUFFIX` empty);
+- per-seed 6q VQ with HML3D RVQ init, then `main_scratch` head for 11,500
+  steps;
+- VAL selection among 9000 / 10500 / last (R@10 within 0.5pp, lowest FID);
+- TEST S=15 evaluated by the clean evaluator, three evaluator seeds.
+
+Earlier artifacts on the v4 split (`_sft_ep1` cache, epoch1, 5100 steps, E2
+evaluator) are **not** the paper main table.

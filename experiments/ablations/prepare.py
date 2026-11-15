@@ -14,7 +14,8 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-from common import (DEFAULT_INIT, DEFAULT_RELEASE, DEFAULT_VQ, Release, atomic_json, build_tc_from_dataset,
+from common import (CLEAN_EVAL_DATA, CLEAN_EVAL_ROOT, DEFAULT_INIT, DEFAULT_RELEASE, DEFAULT_VQ,
+                    EVAL_SEEDS, Release, atomic_json, build_tc_from_dataset,
                     cache_root, data_root, ensure_cache, link, run_root, version_of)
 from registry import ABLATIONS, TRAIN_BASE
 
@@ -56,6 +57,14 @@ def check(release: Path, cache_src: Path | None, build_tc: bool, vq: Path, init:
     counts = info["counts"]
     if counts.get("val") != 213 or counts.get("test") != 213 or counts.get("train", 0) < 1000:
         problems.append(f"unexpected split counts: {counts}")
+    for seed in [s for s in EVAL_SEEDS.split(",") if s]:
+        if not (CLEAN_EVAL_ROOT / f"evaluator_hml3d_clean_s{seed}/best.tar").is_file():
+            problems.append(f"missing clean evaluator seed {seed}")
+    for rel in ("meta/mean.npy", "meta/std.npy", "meta/our_vab_data.npy",
+                "meta/our_vab_words.pkl", "meta/our_vab_idx.pkl",
+                "train_ids.txt", "val_ids.txt", "test_ids.txt"):
+        if not (CLEAN_EVAL_DATA / rel).is_file():
+            problems.append(f"missing clean eval data: {rel}")
     out = run_root(release, "main")
     out.mkdir(parents=True, exist_ok=True)
     if main_ckpt is not None:
@@ -65,6 +74,9 @@ def check(release: Path, cache_src: Path | None, build_tc: bool, vq: Path, init:
         "release": str(release),
         "counts": info["counts"],
         "cache": str(cache["cache"]),
+        "clean_evaluators": str(CLEAN_EVAL_ROOT),
+        "clean_eval_data": str(CLEAN_EVAL_DATA),
+        "eval_seeds": EVAL_SEEDS,
         "vq": str(vq),
         "init_h1": str(init) if init else None,
         "main_ckpt": str(main_ckpt) if main_ckpt else None,

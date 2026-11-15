@@ -80,8 +80,10 @@ def check_required():
         "patches/hero-gen.patch",
         "src/riven/model/h1_6q_train.py", "src/riven/model/h1_6q_gen_condswap.py",
         "src/riven/sft/prep_video_cache.py",
-        "src/riven/eval/eval_r.py", "src/riven/eval/eval_fid.py",
+        "src/riven/eval/clean/eval_clean.py", "src/riven/eval/clean/train_clean_eval.py",
+        "src/riven/eval/clean/modules.py", "src/riven/eval/clean/train.py",
         "experiments/ablations/registry.py", "experiments/ablations/run.py",
+        "experiments/main_table/run_main_table.py", "experiments/main_table/select_test.py",
     ]
     return [p for p in required if not (ROOT / p).is_file()]
 
