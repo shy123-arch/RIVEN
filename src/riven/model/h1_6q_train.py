@@ -183,8 +183,13 @@ def main():
             return self.net(torch.cat([g, m.mean(1)], -1))
 
     readout = Readout(512, 256).to(dev)
-    zc = np.load(Path(os.environ.get("RIVEN_TMR_MOTION_EMB", HT.CACHE / "tmr_motion_emb.npz")))
-    zpos = {str(k): i for i, k in enumerate(zc["ids"])}; Zall = torch.tensor(zc["emb"])
+    # NCE is off in the paper mainline, so the TMR embedding bank is only
+    # touched when an NCE term is actually enabled.  Build it with
+    # src/riven/features/build_tmr_motion_emb_v4.py.
+    zpos, Zall = {}, None
+    if args.lam_nce > 0 or (args.nce_on_m and args.lam_nce_m > 0):
+        zc = np.load(Path(os.environ.get("RIVEN_TMR_MOTION_EMB", HT.CACHE / "tmr_motion_emb.npz")))
+        zpos = {str(k): i for i, k in enumerate(zc["ids"])}; Zall = torch.tensor(zc["emb"])
     def nce(zh, zb, tau=0.07):
         a = torch.nn.functional.normalize(zh, dim=-1); b = torch.nn.functional.normalize(zb, dim=-1)
         return torch.nn.functional.cross_entropy(a @ b.T / tau, torch.arange(len(b), device=b.device))

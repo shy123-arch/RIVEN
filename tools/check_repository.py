@@ -79,6 +79,7 @@ def check_required():
         "docs/METHOD.md", "docs/REPRODUCE.md", "docs/PROVENANCE.md", "docs/SOURCE_SNAPSHOT.json",
         "patches/hero-gen.patch",
         "src/riven/model/h1_6q_train.py", "src/riven/model/h1_6q_gen_condswap.py",
+        "src/riven/sft/prep_video_cache.py",
         "src/riven/eval/eval_r.py", "src/riven/eval/eval_fid.py",
         "experiments/ablations/registry.py", "experiments/ablations/run.py",
     ]

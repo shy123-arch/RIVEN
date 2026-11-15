@@ -27,8 +27,8 @@
       "repo_path": "src/riven/model/h1_6q_train.py",
       "source_path": "umrm_model/experiments/vimo_free_h1_20261101/h1_6q_train.py",
       "source_sha256": "48ab92c0c1c8c714362a2a1dc5f164198b0e823b537d37b6c4413b49243eca85",
-      "repo_sha256": "ca3e265408d5b407799fbaa1fdef3432714ba206f5888f7e11c02617687aaa92",
-      "edits": "paths/imports only"
+      "repo_sha256": "327f50e08a4bc27716ebe62391b6d7ac946ee01102413a9750568271b689d0eb",
+      "edits": "paths/imports + reproducibility guards"
     },
     {
       "repo_path": "src/riven/model/h1_6q_gen_condswap.py",
@@ -104,8 +104,8 @@
       "repo_path": "src/riven/sft/common.py",
       "source_path": "UMRM-OPD/pipeline/common.py",
       "source_sha256": "357c68b363510805df9f70662c71cbc76e9e585c9644c73364de616af506431d",
-      "repo_sha256": "66ea24974e8928016edb9ac53abd56e059e00670d061803cb4fb7738bae3beda",
-      "edits": "paths/imports only"
+      "repo_sha256": "518f4c06e55077b52793f84889daee1dde8993a52416bff751d70a0eaafcaa37",
+      "edits": "paths/imports + reproducibility guards"
     },
     {
       "repo_path": "src/riven/sft/vt_io.py",
@@ -218,6 +218,13 @@
       "source_sha256": "cea31d454888007359db55e2a539aaf72cc0abef417427e461334364c8d7f9d2",
       "repo_sha256": "3b38b69ed98e786061cd2e30d36bf97ba0f66de2149e7ef85b47605f0c76f66c",
       "edits": "paths/imports only"
+    },
+    {
+      "repo_path": "src/riven/sft/prep_video_cache.py",
+      "source_path": "UMRM-OPD/pipeline/prep_video_cache.py",
+      "source_sha256": "126263c322d03229577de0f5b5770555e5b1575c458c070592f0db5f511e812e",
+      "repo_sha256": "ce6a446a71faa028373e75ebf90d12895ecd70e02ae9c5e6e07e588981afd8be",
+      "edits": "missing-clip check + portable clip resolution"
     }
   ],
   "excluded_from_v4": [
@@ -249,7 +256,7 @@
     "trackA_fullref.py",
     "watch_five.py"
   ],
-  "notes": "No algorithmic edits. Hard-coded server paths were replaced by environment variables; v4 output paths use $RIVEN_STATE/ablations to match experiments/ablations.",
+  "notes": "No algorithmic edits. Hard-coded server paths were replaced by environment variables; v4 output paths use $RIVEN_STATE/ablations to match experiments/ablations. prep_video_cache.py added so the dataset videos can be converted to Qwen video tensors; clip paths support RIVEN_CLIP_ROOT/RIVEN_CLIP_MAP; NCE embedding bank is loaded only when an NCE term is on.",
   "private_v4": {
     "path": "riven_private/experiments_v4_20261115 (outside this repository)",
     "source": "umrm_model/experiments/final_v4_20261111/*.py",

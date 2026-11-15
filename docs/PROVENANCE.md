@@ -10,18 +10,22 @@ is `docs/SOURCE_SNAPSHOT.json`.  `python tools/check_repository.py` verifies
 that no absolute server path or secret survives and that every registry flag
 matches its script's argparse.
 
-**Edit policy.**  Algorithmic code is copied verbatim.  The only changes are
+**Edit policy.**  Algorithmic code is copied verbatim.  Changes are limited to
 (a) replacing hard-coded absolute paths with environment variables documented in
-`configs/paths.env.example`, and (b) import paths that follow the new layout.
-The `Δ lines` column counts added+removed lines relative to the source; files
-with `0` are byte-identical.
+`configs/paths.env.example`, (b) import paths that follow the new layout, and
+(c) three reproducibility guards: portable clip resolution in
+`sft/common.py`, the missing-clip check in `prep_video_cache.py`, and loading
+the TMR embedding bank only when an NCE term is enabled.  No tensor shape,
+loss, sampling step, split or evaluator rule changed.  The `Δ lines` column
+counts added+removed lines relative to the source; files with `0` are
+byte-identical.
 
 ## Core method
 
 | Repo path | Source path | Source SHA-256 | Δ lines |
 |---|---|---|---|
 | `src/riven/model/h1_train.py` | `umrm_model/experiments/vimo_free_h1_20261101/h1_train.py` | `0980d4b02ad2` | 19 |
-| `src/riven/model/h1_6q_train.py` | `umrm_model/experiments/vimo_free_h1_20261101/h1_6q_train.py` | `48ab92c0c1c8` | 8 |
+| `src/riven/model/h1_6q_train.py` | `umrm_model/experiments/vimo_free_h1_20261101/h1_6q_train.py` | `48ab92c0c1c8` | 17 |
 | `src/riven/model/h1_6q_gen_condswap.py` | `umrm_model/experiments/cond_swap_v1572_20261104/h1_6q_gen_condswap.py` | `6b83568a72e3` | 7 |
 | `src/riven/model/cond_adapters.py` | `umrm_model/experiments/vimo_free_h1_20261101/cond_adapters.py` | `c8f808a3e066` | 0 |
 | `src/riven/model/ordered_adapter.py` | `umrm_model/experiments/vimo_free_h1_20261101/ordered_adapter.py` | `e09edcdfa383` | 0 |
@@ -37,8 +41,9 @@ with `0` are byte-identical.
 | Repo path | Source path | Source SHA-256 | Δ lines |
 |---|---|---|---|
 | `src/riven/sft/sft.py` | `UMRM-OPD/pipeline/sft.py` | `224b688255ad` | 0 |
-| `src/riven/sft/common.py` | `UMRM-OPD/pipeline/common.py` | `357c68b36351` | 23 |
+| `src/riven/sft/common.py` | `UMRM-OPD/pipeline/common.py` | `357c68b36351` | 54 |
 | `src/riven/sft/vt_io.py` | `UMRM-OPD/pipeline/vt_io.py` | `01e8727fe9f7` | 0 |
+| `src/riven/sft/prep_video_cache.py` | `UMRM-OPD/pipeline/prep_video_cache.py` | see SOURCE_SNAPSHOT | 10 |
 | `src/riven/features/cache_prompt_hidden.py` | `umrm_model/experiments/end2end_v1572_20261028/scripts/cache_prompt_hidden.py` | `5c0f955962b2` | 15 |
 | `src/riven/features/cache_visual_hidden.py` | `umrm_model/experiments/end2end_v1572_20261028/scripts/cache_visual_hidden.py` | `f6b706aeaa85` | 13 |
 | `src/riven/features/merge_prompt_hidden.py` | `umrm_model/experiments/end2end_v1572_20261028/scripts/merge_prompt_hidden.py` | `8cdad9be41d8` | 7 |

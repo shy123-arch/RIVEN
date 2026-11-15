@@ -8,6 +8,8 @@ numpy>=1.24
 # Condition encoder (RIVEN_PY_QWEN only)
 transformers>=4.57
 peft>=0.10
+qwen-vl-utils
+decord
 
 # Excel summaries (RIVEN_PY_EVAL only)
 openpyxl>=3.1

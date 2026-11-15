@@ -181,6 +181,31 @@ def h(k, salt=SALT):
 _MAN = None
 
 
+def _clip(clip: str, key: str, mapping: dict | None, root: Path | None) -> str:
+    """Resolve one clip path against the local data package.
+
+    Priority: RIVEN_CLIP_MAP (key -> relative path) > RIVEN_CLIP_ROOT (rebase
+    after the nearest `clips/` component) > relative-to-DATA > absolute.  The
+    paper release records absolute paths on the authors' server, so a portable
+    package should ship either relative `clip` fields or a clip map.
+    """
+    if mapping and key in mapping:
+        rel = Path(mapping[key])
+        if rel.is_absolute():
+            return str(rel)
+        return str((root / rel) if root else (DATA / rel))
+    p = Path(clip)
+    if root is not None:
+        parts = p.parts
+        if "clips" in parts:
+            i = len(parts) - 1 - parts[::-1].index("clips")
+            return str(root / Path(*parts[i + 1:]))
+        return str(root / p.name)
+    if not p.is_absolute():
+        return str(DATA / p)
+    return str(p)
+
+
 def manifest():
     """Experimental manifest (DATA/data_manifest.json). Only TRAIN and VAL rows are kept in memory ('sealed' only with
     VHO_UNSEAL_SEALED=1); the v860 TEST rows are not part of the released package at all. Relative clip paths are
@@ -189,9 +214,12 @@ def manifest():
     if _MAN is None:
         m = rjson(DATA / "data_manifest.json")
         rows = {k: dict(r) for k, r in m["rows"].items() if r["group"] in EVAL_GROUPS}
-        for r in rows.values():
-            if r.get("clip") and not Path(r["clip"]).is_absolute():
-                r["clip"] = str(DATA / r["clip"])
+        clip_root = Path(os.environ["RIVEN_CLIP_ROOT"]) if os.environ.get("RIVEN_CLIP_ROOT") else None
+        clip_map_path = os.environ.get("RIVEN_CLIP_MAP")
+        clip_map = rjson(clip_map_path) if clip_map_path else None
+        for k, r in rows.items():
+            if r.get("clip"):
+                r["clip"] = _clip(r["clip"], k, clip_map, clip_root)
         op = RUNS / "mr_obs.json"  # perceptual part of the human inner reasoning (teacher-only field, README §5)
         if op.exists():
             for k, t in rjson(op)["final"].items():

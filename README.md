@@ -68,7 +68,9 @@ set -a; . configs/paths.env; set +a
 # Paper mainline: SFT epoch1 (selected by VAL FID) + its sibling cache.
 export RIVEN_SFT_ADAPTER="$RIVEN_STATE/runs/sft_v4/epoch1"
 export RIVEN_CACHE_SUFFIX=_sft_ep1
+export RIVEN_CLIP_ROOT=/data/egoreal/clips     # or RIVEN_CLIP_MAP=clip_map.json
 
+"$RIVEN_PY_QWEN" src/riven/sft/prep_video_cache.py --workers 8
 bash scripts/build_features.sh          # Qwen prompt/visual hidden states
 SEED=20261101 GPU=0 bash scripts/run_main.sh
 ```
