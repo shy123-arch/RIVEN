@@ -76,7 +76,10 @@ def main():
     if args.no_init:
         print(json.dumps({"init": "random", "init_loaded": 0}), flush=True)
     else:
-        ck = torch.load(HERO / "checkpoints/t2m/rvq_nq6_dc512_nc512_noshare_qdp0.2/model/net_best_fid.tar", map_location="cpu")
+        rvq = Path(os.environ.get(
+            "RIVEN_HML3D_RVQ",
+            HERO / "checkpoints/t2m/rvq_nq6_dc512_nc512_noshare_qdp0.2/model/net_best_fid.tar"))
+        ck = torch.load(rvq, map_location="cpu")
         sd = ck["net"]; own = vq.state_dict(); load = {}
         for k, v in sd.items():
             if not args.all_codebooks and k.startswith("quantizer.layers.") and not k.startswith("quantizer.layers.0."):

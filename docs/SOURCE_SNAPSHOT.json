@@ -76,8 +76,8 @@
       "repo_path": "src/riven/model/vq_train.py",
       "source_path": "umrm_model/experiments/vimo_free_h1_20261101/vq_train.py",
       "source_sha256": "814e8d0b1e6ea4b58a8402cca280695378e40ac037a76cd806692691d5cf5ec6",
-      "repo_sha256": "f15f232c6c11c00d177ef4e2d7a2a2deacc5a5de96c2615bb11aa55f75606994",
-      "edits": "paths/imports only"
+      "repo_sha256": "874224c244d95c7ba19804bcd65dd277e43dafbb063ee9222e40510fe28cc3fe",
+      "edits": "paths/imports + RIVEN_HML3D_RVQ override"
     },
     {
       "repo_path": "src/riven/model/finetune_hero.py",
@@ -256,7 +256,7 @@
     "trackA_fullref.py",
     "watch_five.py"
   ],
-  "notes": "No algorithmic edits. Hard-coded server paths were replaced by environment variables; v4 output paths use $RIVEN_STATE/ablations to match experiments/ablations. prep_video_cache.py added so the dataset videos can be converted to Qwen video tensors; clip paths support RIVEN_CLIP_ROOT/RIVEN_CLIP_MAP; NCE embedding bank is loaded only when an NCE term is on.",
+  "notes": "No algorithmic edits. Hard-coded server paths were replaced by environment variables; v4 output paths use $RIVEN_STATE/ablations to match experiments/ablations. prep_video_cache.py added so the dataset videos can be converted to Qwen video tensors; clip paths support RIVEN_CLIP_ROOT/RIVEN_CLIP_MAP; NCE embedding bank is loaded only when an NCE term is on. The only HERO weight needed is one 81 MB HumanML3D RVQ checkpoint (net_best_fid.tar); evaluation assets are shipped as a separate bundle.",
   "private_v4": {
     "path": "riven_private/experiments_v4_20261115 (outside this repository)",
     "source": "umrm_model/experiments/final_v4_20261111/*.py",

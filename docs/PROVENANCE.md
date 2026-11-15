@@ -13,9 +13,11 @@ matches its script's argparse.
 **Edit policy.**  Algorithmic code is copied verbatim.  Changes are limited to
 (a) replacing hard-coded absolute paths with environment variables documented in
 `configs/paths.env.example`, (b) import paths that follow the new layout, and
-(c) three reproducibility guards: portable clip resolution in
-`sft/common.py`, the missing-clip check in `prep_video_cache.py`, and loading
-the TMR embedding bank only when an NCE term is enabled.  No tensor shape,
+(c) four reproducibility guards: portable clip resolution in
+`sft/common.py`, the missing-clip check in `prep_video_cache.py`, loading the
+TMR embedding bank only when an NCE term is enabled, and `RIVEN_HML3D_RVQ`
+so the single tokenizer checkpoint can be shipped independently of the HERO
+checkout.  No tensor shape,
 loss, sampling step, split or evaluator rule changed.  The `Δ lines` column
 counts added+removed lines relative to the source; files with `0` are
 byte-identical.
@@ -32,7 +34,7 @@ byte-identical.
 | `src/riven/model/motion_windows.py` | `umrm_model/experiments/vimo_free_h1_20261101/motion_windows.py` | `17cbf9ee9174` | 0 |
 | `src/riven/model/intent_patch.py` | `umrm_model/experiments/vimo_free_h1_20261101/intent_patch.py` | `4038bf31e017` | 0 |
 | `src/riven/model/cfg_patch.py` | `umrm_model/experiments/vimo_free_h1_20261101/cfg_patch.py` | `9a1e4aff1d7d` | 0 |
-| `src/riven/model/vq_train.py` | `umrm_model/experiments/vimo_free_h1_20261101/vq_train.py` | `814e8d0b1e6e` | 8 |
+| `src/riven/model/vq_train.py` | `umrm_model/experiments/vimo_free_h1_20261101/vq_train.py` | `814e8d0b1e6e` | 13 |
 | `src/riven/model/finetune_hero.py` | `umrm_model/experiments/hero_finetune/finetune_hero.py` | `ca9a6880babd` | 13 |
 | `src/riven/model/cliponly_data.py` | `umrm_model/experiments/cliponly_v1/data.py` | `76ccd15b0b7c` | 7 |
 

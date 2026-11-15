@@ -30,8 +30,12 @@ at them.
 ## Official TMR / TEMOS assets
 
 - `src/riven/eval/setup_tmr.py` fetches a pinned official TMR archive and
-  verifies its checksums.  The archive and the distilled BERT text encoder are
-  not redistributed; install them locally under `RIVEN_TMR_ASSETS`.
+  verifies its checksums.  The archive and the distilled BERT text encoder keep
+  their original licenses; they are distributed unmodified in the separate
+  evaluation bundle and loaded from `RIVEN_TMR_ASSETS`.
+- The bundle's `E2_best.pt` is fitted by this project and released for
+  evaluation use with RIVEN.  It is not derived from the dataset's motion
+  targets beyond TRAIN-only fitting.
 
 ## V->T pipeline (UMRM-OPD)
 
